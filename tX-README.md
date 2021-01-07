@@ -9,7 +9,7 @@ The individual repos are here:
 * https://github.com/unfoldingWord-dev/door43-enqueue-job
 * https://github.com/unfoldingWord-dev/door43-job-handler
 * https://github.com/unfoldingWord-dev/tx-enqueue-job
-* https://github.com/unfoldingWord-dev/tx-job-handler
+* https://gitcd hub.com/unfoldingWord-dev/tx-job-handler
 * https://github.com/unfoldingWord-dev/obs-pdf
 * https://github.com/unfoldingWord-dev/uw-pdf
 * https://github.com/unfoldingWord-dev/tools
@@ -56,6 +56,7 @@ How to run tX on Ubuntu Linux:
 
 ### Initial setup (only need to do once):
 
+1. `docker network create tx-net`
 1. `pip3 install rq`
    * installs the Redis Queue command line tool
 1. `export REPO_ROOT=<repo_root_dir>` 

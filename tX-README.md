@@ -58,7 +58,7 @@ How to run tX on Ubuntu Linux:
 
 1. `pip3 install rq`
    * installs the Redis Queue command line tool
-1. `set REPO_ROOT=<repo_root_dir>` 
+1. `export REPO_ROOT=<repo_root_dir>` 
    * root directory where you'll be cloning all the above repos
 1. `cd $REPO_ROOT`
 1. `git clone https://github.com/unfoldingWord-dev/door43-enqueue-job`

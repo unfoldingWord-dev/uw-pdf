@@ -110,6 +110,7 @@ How to run tX on Ubuntu Linux:
 1. `cd $REPO_ROOT/door43-job-handler`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
+1. `docker network connect tx-net door43-enqueue-job_redis_1`
 1. `make runDevDebug`
 	* Starts the (dev-)door43-job-handler process
 	* which then connects to the local Redis server 

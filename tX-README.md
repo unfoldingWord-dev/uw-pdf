@@ -144,7 +144,7 @@ How to run tX on Ubuntu Linux:
     * Now you're inside the docker container
 	* In terminal tab 6 add this container to the network by running:  
 		`docker network connect tx-net obs-pdf`
-	* Back in the docker container in terminal tab 5 run:
+	* Back in the docker container in terminal tab 5 run:  
 		`./start_RqApp_names.sh`
    		* Starts the (dev-)obs-pdf creator process
    		* which then connects to the local Redis server

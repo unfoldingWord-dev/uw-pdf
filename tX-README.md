@@ -56,8 +56,10 @@ How to run tX on Ubuntu Linux:
 
 ### Initial setup (only need to do once):
 
-1. `pip3 install rq` - installs the Redis Queue command line tool
-1. `set REPO_ROOT=<repo_root_dir>` - root directory where you'll be cloning all the above repos
+1. `pip3 install rq`
+   * installs the Redis Queue command line tool
+1. `set REPO_ROOT=<repo_root_dir>` 
+   * root directory where you'll be cloning all the above repos
 1. `cd $REPO_ROOT`
 1. `git clone https://github.com/unfoldingWord-dev/door43-enqueue-job`
 1. `git clone https://github.com/unfoldingWord-dev/door43-job-handler`
@@ -66,31 +68,31 @@ How to run tX on Ubuntu Linux:
 1. `git clone https://github.com/unfoldingWord-dev/obs-pdf`
 1. `git clone https://github.com/unfoldingWord-dev/uw-pdf`
 1. `git clone https://github.com/unfoldingWord-dev/tools`
-1. `vi setENVs.sh` (new file)
-
-	Add the following content, setting variables to your credentials on AWS and DCS:
-```
-#!/usr/bin/env bash
-#
-# setENVs.sh for Door43 Enqueue Job
-#       Last modified: 2018-12-04 RJH
-#
-
-export DB_ENDPOINT="door43.cluster-ccidwldijq9p.us-west-2.rds.amazonaws.com"
-export AWS_ACCESS_KEY_ID="AKJ.........QRF"
-export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
-export TX_DATABASE_PW="fxt......bv1"
-export GOGS_USER_TOKEN="672................................882"
-
-# Added for rq version
-export QUEUE_PREFIX="dev-"
-export REDIS_URL="redis://172.21.0.2:6379"
-
-# Optional -- not sure what they do
-export DEBUG_MODE="Yeah"
-export TEST_MODE="Maybe"
-```
-
+1. `vi setENVs.sh`
+	* Creates a new file
+	* Add the following content, setting variables to your credentials on AWS and DCS:
+	```
+	#!/usr/bin/env bash
+	#
+	# setENVs.sh for Door43 Enqueue Job
+	#       Last modified: 2018-12-04 RJH
+	#
+	
+	export DB_ENDPOINT="door43.cluster-ccidwldijq9p.us-west-2.rds.amazonaws.com"
+	export AWS_ACCESS_KEY_ID="AKJ.........QRF"
+	export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
+	export TX_DATABASE_PW="fxt......bv1"
+	export GOGS_USER_TOKEN="672................................882"
+	
+	# Added for rq version
+	export QUEUE_PREFIX="dev-"
+	export REDIS_URL="redis://172.21.0.2:6379"
+	
+	# Optional -- not sure what they do
+	export DEBUG_MODE="Yeah"
+	export TEST_MODE="Maybe"
+	```
+	
 ### In terminal tab 1:
 
 1. `cd $REPO_ROOT/door43-enqueue-job`

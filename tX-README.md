@@ -141,8 +141,11 @@ How to run tX on Ubuntu Linux:
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make runDevDebug`
-    * Now you're inside the docker container. Run:
-	  c. `./start_RqApp_names.sh`
+    * Now you're inside the docker container
+	* In terminal tab 6 add this container to the network by running:  
+		`docker network connect tx-net obs-pdf`
+	* Back in the docker container in terminal tab 5 run:
+		`./start_RqApp_names.sh`
    		* Starts the (dev-)obs-pdf creator process
    		* which then connects to the local Redis server
    		* which then translates preprocessed OBS repos to a PDF

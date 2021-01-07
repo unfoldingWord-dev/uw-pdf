@@ -48,19 +48,26 @@ To make a RQ app:
 How to run tX on Ubuntu Linux:
 
 1. Open about six tabs in a terminal window.
-1. Change directory to the appropriate cloned repos, e.g., `cd yourpath/door43-enqueue-job`
+1. Change directory to the appropriate cloned repos, e.g., `cd $REPO_ROOT/door43-enqueue-job`
 1. Setup a Python 3.8 or newer (currently 3.8.6) virtual environment and activate it
 1. Run a batch file to setup environment variables
 1. Run the tX process from the Makefile in debug mode
 1. Simulate the sending of a JSON payload and watch everything happen -- debug mode prints more on the terminal screen
 
-### In terminal tab 1:
+### Initial setup (only need to do once):
 
-1. `cd yourpath/door43-enqueue-job`
-2. `python3 -m venv myVenv/; source myVenv/bin/activate`
-3. `vi setENVs.sh` (new file)
+1. `pip3 install rq` - installs the Redis Queue command line tool
+1. `set REPO_ROOT=<repo_root_dir>` - root directory where you'll be cloning all the above repos
+1. `cd $REPO_ROOT`
+1. `git clone https://github.com/unfoldingWord-dev/door43-enqueue-job`
+1. `git clone https://github.com/unfoldingWord-dev/door43-job-handler`
+1. `git clone https://github.com/unfoldingWord-dev/tx-enqueue-job`
+1. `git clone https://github.com/unfoldingWord-dev/tx-job-handler`
+1. `git clone https://github.com/unfoldingWord-dev/obs-pdf`
+1. `git clone https://github.com/unfoldingWord-dev/uw-pdf`
+1. `vi setENVs.sh` (new file)
 
-	Add the following content, setting variables to your credentials:
+	Add the following content, setting variables to your credentials on AWS and DCS:
 ```
 #!/usr/bin/env bash
 #
@@ -68,112 +75,11 @@ How to run tX on Ubuntu Linux:
 #       Last modified: 2018-12-04 RJH
 #
 
-export AWS_ACCESS_KEY_ID="AKJ.........QRF"
-export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
-```
-
-4. `source setENVs.sh`
-5. `make composeEnqueueRedis` - 
-	Starts a Redis server on 127.0.0.1:6379
-	Then starts the (dev-)door43-enqueue-job process
-		which handles JSON payloads from Door43 webhooks
-	It also handles callbacks from tx-job-handler
-		and uploads the converted files to Door43
-	
-
-### In terminal tab 2:
-
-1. `cd yourpath/door43-job-handler`
-2. `python3 -m venv myVenv/; source myVenv/bin/activate`
-3. `vi setENVs.sh` (new file)
-
-	Add the following content, setting variables to your credentials:
-```	
-#!/usr/bin/env bash
-#
-# setENVs.sh for Door43 Job Handler
-# Last modified: 2020-03-19 RJH
-#
-
 export DB_ENDPOINT="door43.cluster-ccidwldijq9p.us-west-2.rds.amazonaws.com"
+export AWS_ACCESS_KEY_ID="AKJ.........QRF"
+export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
 export TX_DATABASE_PW="fxt......bv1"
-export AWS_ACCESS_KEY_ID="AKJ.........QRF"
-export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
 export GOGS_USER_TOKEN="672................................882"
-```
-
-4. `source setENVs.sh`
-5. `make runDevDebug` - 
-	Starts the (dev-)door43-job-handler process
-		which then connects to the local Redis server
-		and does preprocessing of Door43 repos
-	
-	
-### In terminal tab 3:
-
-1. `cd yourpath/tx-enqueue-job`
-2. `python3 -m venv myVenv/; source myVenv/bin/activate`
-3. `vi setENVs.sh` (new file)
-   
-	Add the following content, setting variables to your credentials:
-```	
-#!/usr/bin/env bash
-#
-# setENVs.sh for tX Enqueue Job
-# Last modified: 2018-12-04 RJH
-#
-
-export AWS_ACCESS_KEY_ID="AKJ.........QRF"
-export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
-```
-
-4. `source setENVs.sh`
-5. `make composeEnqueue` - 
-	Starts the (dev-)tx-enqueue-job process
-		which handles JSON payloads from door43-job-handler
-		and from door43.org PDF button
-   
-### In terminal tab 4:
-
-1. `cd yourpath/tx-job-handler`
-2. `python3 -m venv myVenv/; source myVenv/bin/activate`
-3. `vi setENVs.sh` (new file)
-   
-	Add the following content, setting variables to your credentials:
-```	
-#!/usr/bin/env bash
-#
-# setENVs.sh for tX Job Handler
-# Last modified: 2018-10-27 RJH
-#
-
-export AWS_ACCESS_KEY_ID="AKJ.........QRF"
-export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
-```
-
-4. `source setENVs.sh`
-5. `make runDevDebug` -
-	Starts the (dev-)tx-job-handler process
-		which then connects to the local Redis server
-		and translates preprocessed repos to HTML
-		and then enqueues a door43-callback
-	
-	
-### In terminal tab 5:
-
-1. `cd yourpath/obs-pdf`
-2. `python3 -m venv myVenv/; source myVenv/bin/activate`
-3. `vi setENVs.sh` (new file)
-   
-	Add the following content, setting variables to your credentials:
-```	
-#!/usr/bin/env bash
-#
-# setENVs.sh for OBS PDF creator
-#       Last modified: 2019-07-15 RJH
-#
-export AWS_ACCESS_KEY_ID="AKJ.........QRF"
-export AWS_SECRET_ACCESS_KEY="kxZ...................1bm"
 
 # Added for rq version
 export QUEUE_PREFIX="dev-"
@@ -184,51 +90,90 @@ export DEBUG_MODE="Yeah"
 export TEST_MODE="Maybe"
 ```
 
+### In terminal tab 1:
 
-4. `source setENVs.sh`
-5. `make runDevDebug`
+1. `cd $REPO_ROOT/door43-enqueue-job`
+1. `python3 -m venv myVenv/; source myVenv/bin/activate`
+1. `source ../setENVs.sh`
+1. `make composeEnqueueRedis`
+	* Starts a Redis server on 127.0.0.1:6379
+	* which then starts the (dev-)door43-enqueue-job process
+	* which then handles JSON payloads from Door43 webhooks
+	* which also handles callbacks from tx-job-handler and uploads the converted files to Door43
 	
-Then (inside the container):
+### In terminal tab 2:
 
-1. `cd /`
-2. `./start_RqApp.sh`
+1. `cd $REPO_ROOT/door43-job-handler`
+1. `python3 -m venv myVenv/; source myVenv/bin/activate`
+1. `source ../setENVs.sh`
+1. `make runDevDebug`
+	* Starts the (dev-)door43-job-handler process
+	* which then connects to the local Redis server 
+	* which then does preprocessing of Door43 repos
+	
+### In terminal tab 3:
+
+1. `cd $REPO_ROOT/tx-enqueue-job`
+1. `python3 -m venv myVenv/; source myVenv/bin/activate`
+1. `source ../setENVs.sh`
+1. `make composeEnqueue`
+	* Starts the (dev-)tx-enqueue-job process
+	* which then handles JSON payloads from door43-job-handler and from door43.org PDF button
    
-`start_RqApp.sh` file:
+### In terminal tab 4:
 
-Starts the (dev-)obs-pdf creator process
-		which then connects to the local Redis server
-		and translates preprocessed OBS repos to a PDF
-		and then enqueues a door43-callback
+1. `cd $REPO_ROOT/tx-job-handler`
+1. `python3 -m venv myVenv/; source myVenv/bin/activate`
+1. `source ../setENVs.sh`
+1. `make runDevDebug`
+	* Starts the (dev-)tx-job-handler process
+	* which then connects to the local Redis server
+	* which then translates preprocessed repos to HTML
+	* which then enqueues a door43-callback
+	
+### In terminal tab 5:
 
-```
-#! /usr/bin/env bash
-set -e
+1. `cd $REPO_ROOT/obs-pdf`
+1. `python3 -m venv myVenv/; source myVenv/bin/activate`
+1. `source ../setENVs.sh`
+1. `make runDevDebug`
+    * Then (inside the container):
+      1. `cd /`
+      1. `vi start_RqApp.sh` (new file)
+		```
+		#! /usr/bin/env bash
+		set -e
 
-# Start the Rq worker
-cd /app/obs-pdf/public
-#rq worker --config rq_settings --name tX_Dev_HTML_Job_Handler
-rq worker --config rq_settings
-```
-
+		# Start the Rq worker
+		cd /app/obs-pdf/public
+		#rq worker --config rq_settings --name tX_Dev_HTML_Job_Handler
+		rq worker --config rq_settings
+		```
+	  c. `./start_RqApp.sh`
+   		* Starts the (dev-)obs-pdf creator process
+   		* which then connects to the local Redis server
+   		* which then translates preprocessed OBS repos to a PDF
+   		* which then enqueues a door43-callback
 
 ### Docker check
 
 You have to make sure that all these docker processes are communicating properly:
 
+#### In terminal tab 6:
+
 1. `docker network ls`
 1. `docker network inspect tx-net`
 1. `docker network connect tx-net tx-enqueue-job_txenqueue_1` (I think) if it's not already connected automagically.
-
 
 Now it's all set-up.
 
 
 ## Generating a PDF
 
-### In terminal tab 0:
+### In terminal tab 6:
 
-1. `cd yourpath/tools/tx`
-2. `./submit_one_Door43_test.py` -
+1. `cd $REPO_ROOT/tools/tx`
+1. `./submit_one_Door43_test.py` -
 	submits a simulated JSON "push" payload to start tX off, e.g.:
 ```
 {

@@ -12,7 +12,7 @@ The individual repos are here:
 * https://github.com/unfoldingWord-dev/tx-job-handler
 * https://github.com/unfoldingWord-dev/obs-pdf
 * https://github.com/unfoldingWord-dev/uw-pdf
-* https://github.com/unfoldingWord-dev/tools/tree/develop/tx
+* https://github.com/unfoldingWord-dev/tools
 	
 
 ## Job Queues involved:
@@ -65,6 +65,7 @@ How to run tX on Ubuntu Linux:
 1. `git clone https://github.com/unfoldingWord-dev/tx-job-handler`
 1. `git clone https://github.com/unfoldingWord-dev/obs-pdf`
 1. `git clone https://github.com/unfoldingWord-dev/uw-pdf`
+1. `git clone https://github.com/unfoldingWord-dev/tools`
 1. `vi setENVs.sh` (new file)
 
 	Add the following content, setting variables to your credentials on AWS and DCS:
@@ -173,99 +174,97 @@ Now it's all set-up.
 ### In terminal tab 6:
 
 1. `cd $REPO_ROOT/tools/tx`
-1. `./submit_one_Door43_test.py` -
-	submits a simulated JSON "push" payload to start tX off, e.g.:
-```
-{
-  "secret": "",
-  "ref": "refs/heads/master",
-  "before": "master",
-  "after": "master",
-  "compare_url": "",
-  "commits": [
-    {
-      "id": "master",
-      "message": "Completed \"And\" corrections and continued Matthew edit (#1806)\n",
-      "url": "https://git.door43.org/unfoldingWord/en_ult/commit/master",
-      "author": {
-	"name": "Larry Sallee",                                                                                                   
-	"email": "lrsallee@noreply.door43.org",                                                                                   
-	"username": ""                                                                                                            
-      },
-      "committer": {
-	"name": "Gogs",                                                                                                           
-	"email": "gogs@fake.local",
-	"username": ""
-      },
-      "verification": null,
-      "timestamp": "0001-01-01T00:00:00Z"
-    }
-  ],
-  "repository": {
-    "id": 11419,
-    "owner": {
-      "id": 613,
-      "login": "unfoldingWord",
-      "full_name": "unfoldingWord",
-      "email": "unfoldingword@noreply.door43.org",
-      "avatar_url": "https://git.door43.org/avatars/4f8ed65a91810d6162092c907126c8d3",
-      "username": "unfoldingWord"
-    },
-    "name": "en_ult",
-    "full_name": "unfoldingWord/en_ult",
-    "description": "Source files for unfoldingWord Literal Text (formerly ULB)",
-    "empty": false,
-    "private": false,
-    "fork": false,
-    "parent": null,
-    "mirror": false,
-    "size": 91754,
-    "html_url": "https://git.door43.org/unfoldingWord/en_ult",
-    "ssh_url": "git@git.door43.org:unfoldingWord/en_ult.git",
-    "clone_url": "https://git.door43.org/unfoldingWord/en_ult.git",
-    "website": "https://unfoldingword.bible/ult/",
-    "stars_count": 7,
-    "forks_count": 15,
-    "watchers_count": 4,
-    "open_issues_count": 44,
-    "default_branch": "master",
-    "created_at": "2017-06-01T22:16:16Z",
-    "updated_at": "2018-10-26T21:03:29Z",
-    "permissions": {
-      "admin": false,
-      "push": false,
-      "pull": false
-    }
-  },
-  "pusher": {
-    "id": 6442,
-    "login": "RobH",
-    "full_name": "Robert Hunt",
-    "email": "robh@noreply.door43.org",
-    "avatar_url": "https://git.door43.org/avatars/f85d2867fead49449e89c6822dc77bc6",
-    "username": "RobH"
-  },
-  "sender": {
-    "id": 6442,
-    "login": "RobH",
-    "full_name": "Robert Hunt",
-    "email": "robh@noreply.door43.org",
-    "avatar_url": "https://git.door43.org/avatars/f85d2867fead49449e89c6822dc77bc6",
-    "username": "RobH"
-  }
-}
-```
-
-3. or alternatively, to make a PDF via tx-enqueue-job (IIRC):
-   
-```
-{
-    "job_id": "OBS-PDF.test-1.en",
-    "identifier": "unfoldingWord--en_obs--master",
-    "user_token": "682...............................842",
-    "resource_type": "Open_Bible_Stories",
-    "input_format": "md",
-    "output_format": "pdf",
-    "source": "https://git.door43.org/unfoldingWord/en_obs/archive/master.zip"
-}
-```
+1. `./submit_one_Door43_test.py`
+	* submits a simulated JSON "push" payload to start tX off, e.g.:
+	```
+	{
+	  "secret": "",
+	  "ref": "refs/heads/master",
+	  "before": "master",
+	  "after": "master",
+	  "compare_url": "",
+	  "commits": [
+	    {
+	      "id": "master",
+	      "message": "Completed \"And\" corrections and continued Matthew edit (#1806)\n",
+	      "url": "https://git.door43.org/unfoldingWord/en_ult/commit/master",
+	      "author": {
+		"name": "Larry Sallee",                                                                                                   
+		"email": "lrsallee@noreply.door43.org",                                                                                   
+		"username": ""                                                                                                            
+	      },
+	      "committer": {
+		"name": "Gogs",                                                                                                           
+		"email": "gogs@fake.local",
+		"username": ""
+	      },
+	      "verification": null,
+	      "timestamp": "0001-01-01T00:00:00Z"
+	    }
+	  ],
+	  "repository": {
+	    "id": 11419,
+	    "owner": {
+	      "id": 613,
+	      "login": "unfoldingWord",
+	      "full_name": "unfoldingWord",
+	      "email": "unfoldingword@noreply.door43.org",
+	      "avatar_url": "https://git.door43.org/avatars/4f8ed65a91810d6162092c907126c8d3",
+	      "username": "unfoldingWord"
+	    },
+	    "name": "en_ult",
+	    "full_name": "unfoldingWord/en_ult",
+	    "description": "Source files for unfoldingWord Literal Text (formerly ULB)",
+	    "empty": false,
+	    "private": false,
+	    "fork": false,
+	    "parent": null,
+	    "mirror": false,
+	    "size": 91754,
+	    "html_url": "https://git.door43.org/unfoldingWord/en_ult",
+	    "ssh_url": "git@git.door43.org:unfoldingWord/en_ult.git",
+	    "clone_url": "https://git.door43.org/unfoldingWord/en_ult.git",
+	    "website": "https://unfoldingword.bible/ult/",
+	    "stars_count": 7,
+	    "forks_count": 15,
+	    "watchers_count": 4,
+	    "open_issues_count": 44,
+	    "default_branch": "master",
+	    "created_at": "2017-06-01T22:16:16Z",
+	    "updated_at": "2018-10-26T21:03:29Z",
+	    "permissions": {
+	      "admin": false,
+	      "push": false,
+	      "pull": false
+	    }
+	  },
+	  "pusher": {
+	    "id": 6442,
+	    "login": "RobH",
+	    "full_name": "Robert Hunt",
+	    "email": "robh@noreply.door43.org",
+	    "avatar_url": "https://git.door43.org/avatars/f85d2867fead49449e89c6822dc77bc6",
+	    "username": "RobH"
+	  },
+	  "sender": {
+	    "id": 6442,
+	    "login": "RobH",
+	    "full_name": "Robert Hunt",
+	    "email": "robh@noreply.door43.org",
+	    "avatar_url": "https://git.door43.org/avatars/f85d2867fead49449e89c6822dc77bc6",
+	    "username": "RobH"
+	  }
+	}
+	```
+	* or alternatively, to make a PDF via tx-enqueue-job (IIRC):
+	```
+	{
+	    "job_id": "OBS-PDF.test-1.en",
+	    "identifier": "unfoldingWord--en_obs--master",
+	    "user_token": "682...............................842",
+	    "resource_type": "Open_Bible_Stories",
+	    "input_format": "md",
+	    "output_format": "pdf",
+	    "source": "https://git.door43.org/unfoldingWord/en_obs/archive/master.zip"
+	}
+	```

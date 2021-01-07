@@ -110,7 +110,6 @@ How to run tX on Ubuntu Linux:
 1. `cd $REPO_ROOT/door43-job-handler`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
-1. `docker network connect tx-net door43-enqueue-job_redis_1`
 1. `make runDevDebug`
 	* Starts the (dev-)door43-job-handler process
 	* which then connects to the local Redis server 
@@ -142,19 +141,8 @@ How to run tX on Ubuntu Linux:
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make runDevDebug`
-    * Then (inside the container):
-      1. `cd /`
-      1. `vi start_RqApp.sh` (new file)
-		```
-		#! /usr/bin/env bash
-		set -e
-
-		# Start the Rq worker
-		cd /app/obs-pdf/public
-		#rq worker --config rq_settings --name tX_Dev_HTML_Job_Handler
-		rq worker --config rq_settings
-		```
-	  c. `./start_RqApp.sh`
+    * Now you're inside the docker container. Run:
+	  c. `./start_RqApp_names.sh`
    		* Starts the (dev-)obs-pdf creator process
    		* which then connects to the local Redis server
    		* which then translates preprocessed OBS repos to a PDF
@@ -168,7 +156,8 @@ You have to make sure that all these docker processes are communicating properly
 
 1. `docker network ls`
 1. `docker network inspect tx-net`
-1. `docker network connect tx-net tx-enqueue-job_txenqueue_1` (I think) if it's not already connected automagically.
+1. `docker network connect tx-net door43-enqueue-job_redis_1`
+1. `docker network connect tx-net tx-enqueue-job_txenqueue_1`
 
 Now it's all set-up.
 

@@ -19,12 +19,12 @@ The individual repos are here:
 
 tX has these 3 job queues: 
 
-1. make HTML pages
-1. make OBS PDFs
-1. make other PDFs
+1. tX_webhook: makes HTML pages
+1. tX_OBS_PDF_webhook: makes OBS PDFs
+1. tXmake other PDFs
    
-The queue for #2 is called tX_obs_PDF_webhook. 
-
+The queue for #1 is called tX_webhook
+The queue for #2 is called tX_OBS_PDF_webhook.
 The queue for #3 is called tX_other_PDF_webhook. 
 
 
@@ -48,8 +48,8 @@ To make a RQ app:
 How to run tX on Ubuntu Linux:
 
 1. Open about six tabs in a terminal window.
-1. Change directory to the appropriate cloned repos, e.g., `cd $REPO_ROOT/door43-enqueue-job`
-1. Setup a Python 3.8 or newer (currently 3.8.6) virtual environment and activate it
+1. Change directory to the appropriate cloned repos, e.g., `cd <your_repos_dir>/door43-enqueue-job`
+1. Set up a Python 3.8 or newer (currently 3.8.6) virtual environment and activate it
 1. Run a batch file to setup environment variables
 1. Run the tX process from the Makefile in debug mode
 1. Simulate the sending of a JSON payload and watch everything happen -- debug mode prints more on the terminal screen
@@ -57,18 +57,14 @@ How to run tX on Ubuntu Linux:
 ### Initial setup (only need to do once):
 
 1. `docker network create tx-net`
-1. `pip3 install rq`
-   * installs the Redis Queue command line tool
-1. `export REPO_ROOT=<repo_root_dir>` 
-   * root directory where you'll be cloning all the above repos
-1. `cd $REPO_ROOT`
-1. `git clone https://github.com/unfoldingWord-dev/door43-enqueue-job`
-1. `git clone https://github.com/unfoldingWord-dev/door43-job-handler`
-1. `git clone https://github.com/unfoldingWord-dev/tx-enqueue-job`
-1. `git clone https://github.com/unfoldingWord-dev/tx-job-handler`
-1. `git clone https://github.com/unfoldingWord-dev/obs-pdf`
-1. `git clone https://github.com/unfoldingWord-dev/uw-pdf`
-1. `git clone https://github.com/unfoldingWord-dev/tools`
+1. `cd <your_repos_dir>` - change to your place to clone repos for this project
+1. `git clone git@github.com:unfoldingword-dev/door43-enqueue-job.git`
+1. `git clone git@github.com:unfoldingword-dev/door43-job-handler.git`
+1. `git clone git@github.com:unfoldingword-dev/tx-enqueue-job.git`
+1. `git clone git@github.com:unfoldingword-dev/tx-job-handler.git`
+1. `git clone git@github.com:unfoldingword-dev/obs-pdf.git`
+1. `git clone git@github.com:unfoldingword-dev/uw-pdf.git`
+1. `git clone git@github.com:unfoldingword-dev/tools.git`
 1. `vi setENVs.sh`
 	* Creates a new file
 	* Add the following content, setting variables to your credentials on AWS and DCS:
@@ -87,37 +83,37 @@ How to run tX on Ubuntu Linux:
 	
 	# Added for rq version
 	export QUEUE_PREFIX="dev-"
-	export REDIS_URL="redis://172.21.0.2:6379"
+	export REDIS_URL="redis://door43-enqueue-job_redis_1:6379"
 	
-	# Optional -- not sure what they do
-	export DEBUG_MODE="Yeah"
-	export TEST_MODE="Maybe"
+	# To ensure Debug Mode is on
+	export DEBUG_MODE="true"
+	export TEST_MODE="true"
 	```
 	
 ### In terminal tab 1:
 
-1. `cd $REPO_ROOT/door43-enqueue-job`
+1. `cd <your_repos_dir>/door43-enqueue-job`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make composeEnqueueRedis`
-	* Starts a Redis server on 127.0.0.1:6379
+	* Starts a Redis server in the local tx-net Docker network
 	* which then starts the (dev-)door43-enqueue-job process
 	* which then handles JSON payloads from Door43 webhooks
 	* which also handles callbacks from tx-job-handler and uploads the converted files to Door43
 	
 ### In terminal tab 2:
 
-1. `cd $REPO_ROOT/door43-job-handler`
+1. `cd <your_repos_dir>/door43-job-handler`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make runDevDebug`
 	* Starts the (dev-)door43-job-handler process
-	* which then connects to the local Redis server 
+	* which then connects to the local tx-net network Redis server 
 	* which then does preprocessing of Door43 repos
 	
 ### In terminal tab 3:
 
-1. `cd $REPO_ROOT/tx-enqueue-job`
+1. `cd <your_repos_dir>/tx-enqueue-job`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make composeEnqueue`
@@ -126,18 +122,18 @@ How to run tX on Ubuntu Linux:
    
 ### In terminal tab 4:
 
-1. `cd $REPO_ROOT/tx-job-handler`
+1. `cd <your_repos_dir>/tx-job-handler`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make runDevDebug`
 	* Starts the (dev-)tx-job-handler process
-	* which then connects to the local Redis server
+	* which then connects to the local tx-net network Redis server
 	* which then translates preprocessed repos to HTML
 	* which then enqueues a door43-callback
 	
 ### In terminal tab 5:
 
-1. `cd $REPO_ROOT/obs-pdf`
+1. `cd <your_repos_dir>/obs-pdf`
 1. `python3 -m venv myVenv/; source myVenv/bin/activate`
 1. `source ../setENVs.sh`
 1. `make runDevDebug`
@@ -159,8 +155,6 @@ You have to make sure that all these docker processes are communicating properly
 
 1. `docker network ls`
 1. `docker network inspect tx-net`
-1. `docker network connect tx-net door43-enqueue-job_redis_1`
-1. `docker network connect tx-net tx-enqueue-job_txenqueue_1`
 
 Now it's all set-up.
 
@@ -169,7 +163,7 @@ Now it's all set-up.
 
 ### In terminal tab 6:
 
-1. `cd $REPO_ROOT/tools/tx`
+1. `cd <your_repos_dir>/tools/tx`
 1. `./submit_one_Door43_test.py`
 	* submits a simulated JSON "push" payload to start tX off, e.g.:
 	```
@@ -252,7 +246,9 @@ Now it's all set-up.
 	  }
 	}
 	```
-	* or alternatively, to make a PDF via tx-enqueue-job (IIRC):
+1. or alternatively, to make a PDF via tx-enqueue-job, run:
+   `./submit_tX_tests.py`
+   with this in the JSON file it loads:
 	```
 	{
 	    "job_id": "OBS-PDF.test-1.en",

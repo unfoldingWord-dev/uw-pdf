@@ -1,4 +1,4 @@
-#FROM tiangolo/uwsgi-nginx-flask:python3.7 # OBSOLETE because we switched to RQ
+#FROM tiangolo/uwsgi-nginx-flask:python3.7 # uW PDFOLETE because we switched to RQ
 # See https://hub.docker.com/_/python/ for available packages
 # FROM python:3.7-slim-stretch
 # Brings in ConTeXt MkIV 2016.05
@@ -6,11 +6,11 @@
 #       see https://github.com/rq/rq/issues/1168
 #FROM python:3.8-slim-buster
 # Brings in ConTeXt MkIV 2018.04.04 which seems to have different syntax
-FROM unfoldingword/obs-stretch-base:latest
+FROM unfoldingword/uw-pdf-stretch-base:latest
 # Brings in ConTeXt MkIV 2016.05
 #   but has Python 3.8.1
 
-# install packages, nodejs, and the OBS images
+# install packages, nodejs, and the uW PDF images
 RUN apt-get update \
     && apt-get dist-upgrade -y \
     && apt-get install -y apt-utils \
@@ -34,10 +34,8 @@ RUN apt-get update \
     && chmod +x nodesource_setup.sh \
     && ./nodesource_setup.sh \
     && apt-get install -y nodejs \
-    && mkdir -p /opt/obs/images \
-    && mkdir -p /opt/obs/png \
-    && mkdir -p /opt/obs/jpg \
-    && curl -sL https://filedn.com/lD0GfuMvTstXgqaJfpLL87S/obs/jpg/obs-images-360px.zip -o /opt/obs/jpg/obs-images-360px.zip \
-    && curl -sL https://cdn.door43.org/obs/png/uW_OBS_Logo.png -o /opt/obs/png/uW_OBS_Logo.png \
-    && unzip /opt/obs/jpg/obs-images-360px.zip -d /opt/obs/jpg \
-    && rm -v /opt/obs/jpg/obs-images-360px.zip
+    && mkdir -p /opt/uw-pdf/png \
+    && mkdir -p /opt/uw-pdf/jpg \
+    && curl -sL https://cdn.door43.org/uw-pdf/png/uW_OBS_Logo.png -o /opt/uw-pdf/png/uW_uW PDF_Logo.png \
+    && unzip /opt/uw-pdf/jpg/uw-pdf-images-360px.zip -d /opt/uw-pdf/jpg \
+    && rm -v /opt/uw-pdf/jpg/uw-pdf-images-360px.zip

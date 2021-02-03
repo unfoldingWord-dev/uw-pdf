@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 set -e
 
-# Start the en OBS test
-cd /app/obs-pdf/public
+# Start the en uW PDF test
+cd /app/uw-pdf/public
 python3 test_en.py

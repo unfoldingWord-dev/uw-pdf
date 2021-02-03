@@ -1,20 +1,20 @@
-FROM unfoldingword/obs-base:latest
+FROM unfoldingword/uw-pdf-base:latest
 
 # Which uWSGI .ini file should be used, to make it customizable
-#ENV UWSGI_INI /app/obs-pdf/public/uwsgi.ini
+#ENV UWSGI_INI /app/uw-pdf/public/uwsgi.ini
 
 # URL under which static (not modified by Python) files will be requested
 # They will be served by Nginx directly, without being handled by uWSGI
 #ENV STATIC_URL /output
 # Absolute path in where the static files wil be
-#ENV STATIC_PATH /app/obs-pdf/output
+#ENV STATIC_PATH /app/uw-pdf/output
 # Timeout in seconds for processing Flask requests
 #ENV NGINX_TIMEOUT 300
 
-COPY . /app/obs-pdf/
+COPY . /app/uw-pdf/
 
-# install the obs-pdf app
-RUN cd /app/obs-pdf \
+# install the uw-pdf app
+RUN cd /app/uw-pdf \
     && pip install --upgrade pip \
     && pip install --upgrade -r prerequisites.txt \
     && pip install -r requirements.txt

@@ -1,4 +1,4 @@
-# Docker Container for Building OBS PDF Files
+# Docker Container for Building uW PDF Files
 
 Includes Python3 and ConText
 
@@ -12,7 +12,7 @@ sudo reboot
 ### Build the Docker container
 ```bash
 # cd ~/Projects/uW-docker
-# docker build -t obs-pdf - < Dockerfile
+# docker build -t uw-pdf - < Dockerfile
 # docker-compose build --force-rm
 make baseContainer
 make mainContainer
@@ -32,33 +32,33 @@ docker container ls -a
 
 ### Run the Docker container, opening shell
 ```bash
-docker run --name obs-pdf --rm -p 8080:80 -i -t obs-pdf bash
+docker run --name uw-pdf --rm -p 8080:80 -i -t uw-pdf bash
 exit
 ```
 
 ### Run the Docker container in background and execute commands
 ```bash
-docker pull unfoldingWord/obs-pdf:latest
-docker run --name obs-pdf --rm -p 8080:80 -dit --cpus=0.5 unfoldingWord/obs-pdf:latest
-docker run --name obs-pdf -p 8080:80 -dit --cpus=0.5 --restart unless-stopped unfoldingWord/obs-pdf:latest
+docker pull unfoldingWord/uw-pdf:latest
+docker run --name uw-pdf --rm -p 8080:80 -dit --cpus=0.5 unfoldingWord/uw-pdf:latest
+docker run --name uw-pdf -p 8080:80 -dit --cpus=0.5 --restart unless-stopped unfoldingWord/uw-pdf:latest
 
 # simple commands
-docker exec obs-pdf pwd
+docker exec uw-pdf pwd
 
 # chained or piped commands
-docker exec obs-pdf sh -c "echo 'hello' > hello.txt"
+docker exec uw-pdf sh -c "echo 'hello' > hello.txt"
 
 # copy a file
-docker cp obs-pdf:/opt/hello.txt ~/Desktop/hello.txt
+docker cp uw-pdf:/opt/hello.txt ~/Desktop/hello.txt
 
 # stop the container
-docker stop obs-pdf
+docker stop uw-pdf
 ```
 
 ### Remove a container and its image
 ```bash
 docker rm -v 840cbddced04
-docker rmi obs-pdf
+docker rmi uw-pdf
 ```
 
 ### Remove all containers and images

@@ -12,8 +12,8 @@ else
 fi
 
 # Start Supervisor, with Nginx and uWSGI
-# Presumably the following line is to help it find /app/obs-pdf/public/uwsgi.ini
-cd /app/obs-pdf/public
+# Presumably the following line is to help it find /app/uw-pdf/public/uwsgi.ini
+cd /app/uw-pdf/public
 # The following line uses /etc/supervisor/conf.d/supervisord.conf
 exec /usr/bin/supervisord
 # Seems /etc/uwsgi/uwsgi.ini is also used.
